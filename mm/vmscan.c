@@ -1190,7 +1190,6 @@ unsigned long reclaim_clean_pages_from_list(struct zone *zone,
 }
 
 #ifdef CONFIG_PROCESS_RECLAIM
-<<<<<<< HEAD
 static unsigned long shrink_page(struct page *page,
 					struct zone *zone,
 					struct scan_control *sc,
@@ -1213,11 +1212,8 @@ static unsigned long shrink_page(struct page *page,
 	return reclaimed;
 }
 
-unsigned long reclaim_pages_from_list(struct list_head *page_list)
-=======
 unsigned long reclaim_pages_from_list(struct list_head *page_list,
 					struct vm_area_struct *vma)
->>>>>>> 55cee6a... mm: Enhance per process reclaim to consider shared pages
 {
 	struct scan_control sc = {
 		.gfp_mask = GFP_KERNEL,
