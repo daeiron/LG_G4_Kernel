@@ -560,6 +560,7 @@ exit_timeout:
 				"   Total reserve is %ldkB\n" \
 				"   Total free pages is %ldkB\n" \
 				"   Total file cache is %ldkB\n" \
+				"   Total anon is %ldkB\n" \
 				"   Slab Reclaimable is %ldkB\n" \
 				"   Slab UnReclaimable is %ldkB\n" \
 				"   Total Slab is %ldkB\n" \
@@ -570,6 +571,8 @@ exit_timeout:
 			     global_page_state(NR_FREE_PAGES) *
 				(long)(PAGE_SIZE / 1024),
 			     global_page_state(NR_FILE_PAGES) *
+				(long)(PAGE_SIZE / 1024),
+			     global_page_state(NR_ANON_PAGES) *
 				(long)(PAGE_SIZE / 1024),
 			     global_page_state(NR_SLAB_RECLAIMABLE) *
 				(long)(PAGE_SIZE / 1024),
