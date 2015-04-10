@@ -160,6 +160,8 @@ enum zone_stat_item {
 #ifdef CONFIG_PAGE_USAGE
 	NR_USE_PAGES,
 #endif
+	NR_ION_PAGES,
+	NR_ION_CMA_PAGES,
 	NR_VM_ZONE_STAT_ITEMS };
 
 /*

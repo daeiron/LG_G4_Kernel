@@ -565,6 +565,8 @@ exit_timeout:
 				"   Slab Reclaimable is %ldkB\n" \
 				"   Slab UnReclaimable is %ldkB\n" \
 				"   Total Slab is %ldkB\n" \
+				"   ION is %ldkB\n" \
+				"   ION_CMA is %ldkB\n" \
 				"   GFP mask is 0x%x\n",
 			     global_page_state(NR_FREE_CMA_PAGES) *
 				(long)(PAGE_SIZE / 1024),
@@ -582,6 +584,10 @@ exit_timeout:
 			     global_page_state(NR_SLAB_RECLAIMABLE) *
 				(long)(PAGE_SIZE / 1024) +
 			     global_page_state(NR_SLAB_UNRECLAIMABLE) *
+				(long)(PAGE_SIZE / 1024),
+			     global_page_state(NR_ION_PAGES) *
+				(long)(PAGE_SIZE / 1024),
+			     global_page_state(NR_ION_CMA_PAGES) *
 				(long)(PAGE_SIZE / 1024),
 			     sc->gfp_mask);
 
