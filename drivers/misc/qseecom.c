@@ -3649,8 +3649,8 @@ static int qseecom_query_app_loaded(struct qseecom_dev_handle *data,
 		strlcpy(data->client.app_name, query_req.app_name,
 				MAX_APP_NAME_SIZE);
 		/*
-		 * If app was loaded by appsbl before and was not registered,
-		 * regiser this app now.
+		 * If app was loaded by appsbl or kernel client before
+		 * and was not registered, regiser this app now.
 		 */
 		if (!found_app) {
 			pr_debug("Register app %d [%s] which was loaded before\n",
