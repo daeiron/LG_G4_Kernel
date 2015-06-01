@@ -1519,6 +1519,8 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		ctrl_pdata->refresh_clk_rate = true;
 		break;
 	case MDSS_EVENT_LINK_READY:
+		if (ctrl_pdata->refresh_clk_rate)
+			rc = mdss_dsi_clk_refresh(pdata);
 #if IS_ENABLED(CONFIG_LGE_DISPLAY_POWER_SEQUENCE)
 		if (lge_mdss_dsi.lge_mdss_dsi_event_handler)
 			lge_mdss_dsi.lge_mdss_dsi_event_handler(pdata, event, arg);
@@ -1529,8 +1531,6 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		break;
 	case MDSS_EVENT_UNBLANK:
 		mdss_dsi_get_hw_revision(ctrl_pdata);
-		if (ctrl_pdata->refresh_clk_rate)
-			rc = mdss_dsi_clk_refresh(pdata);
 
 		if (ctrl_pdata->on_cmds.link_state == DSI_LP_MODE)
 			rc = mdss_dsi_unblank(pdata);
