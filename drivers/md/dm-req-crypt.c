@@ -1257,6 +1257,7 @@ static int req_crypt_ctr(struct dm_target *ti, unsigned int argc, char **argv)
 		printk(KERN_ERR " [CCAudit] %s ablkcipher tfm allocation failed : error\n",
 					 __func__);
 		err =  DM_REQ_CRYPT_ERROR;
+		tfm = NULL;
 		goto ctr_exit;
 	}
 
