@@ -23,6 +23,7 @@
 #include <linux/regulator/consumer.h>
 #include <linux/leds-qpnp-wled.h>
 #include <linux/clk.h>
+#include <linux/lcd_notify.h>
 
 #include "mdss.h"
 #include "mdss_panel.h"
@@ -1534,6 +1535,7 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 							pdata);
 		break;
 	case MDSS_EVENT_UNBLANK:
+		lcd_notifier_call_chain(LCD_EVENT_ON_START, NULL);
 		mdss_dsi_get_hw_revision(ctrl_pdata);
 
 		if (ctrl_pdata->on_cmds.link_state == DSI_LP_MODE)
@@ -1548,8 +1550,10 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		if (!use_fb_notifier)
 			state_resume();
 #endif
+		lcd_notifier_call_chain(LCD_EVENT_ON_END, NULL);
 		break;
 	case MDSS_EVENT_BLANK:
+	lcd_notifier_call_chain(LCD_EVENT_OFF_START, NULL);
 #if IS_ENABLED(CONFIG_LGE_DISPLAY_POWER_SEQUENCE)
 		if (lge_mdss_dsi.lge_mdss_dsi_event_handler)
 			lge_mdss_dsi.lge_mdss_dsi_event_handler(pdata, event, arg);
@@ -1565,10 +1569,14 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		if (ctrl_pdata->off_cmds.link_state == DSI_LP_MODE)
 			rc = mdss_dsi_blank(pdata, power_state);
 		rc = mdss_dsi_off(pdata, power_state);
+<<<<<<< HEAD
 #ifdef CONFIG_STATE_NOTIFIER
 		if (!use_fb_notifier)
 			state_suspend();
 #endif
+=======
+		lcd_notifier_call_chain(LCD_EVENT_OFF_END, NULL);
+>>>>>>> 447934f... msm: mdss: Adding lcd notifier
 #if IS_ENABLED(CONFIG_LGE_DISPLAY_POWER_SEQUENCE)
 		if (lge_mdss_dsi.lge_mdss_dsi_event_handler)
 			lge_mdss_dsi.lge_mdss_dsi_event_handler(pdata, event, arg);
