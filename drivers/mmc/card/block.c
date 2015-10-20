@@ -742,8 +742,8 @@ static int mmc_blk_ioctl_cmd(struct block_device *bdev,
 	mmc_claim_host(card->host);
 
 #ifdef CONFIG_MACH_LGE
-    if (mmc_card_get_bkops_en_manual(card))
-        mmc_stop_bkops(card);
+	if (mmc_card_get_bkops_en_manual(card))
+		mmc_stop_bkops(card);
 #endif
 
 	if(cmd.opcode == MMC_FFU_DOWNLOAD_OP) {
@@ -777,7 +777,6 @@ static int mmc_blk_ioctl_cmd(struct block_device *bdev,
 		}
 		goto cmd_rel_host;
 	}
-
 	err = mmc_blk_part_switch(card, md);
 	if (err)
 		goto cmd_rel_host;
