@@ -3795,10 +3795,16 @@ restart:
 			lock_sock(sk);
 /* 2013-07-05 indal.choi@lge.com LGP_DATA_KERNEL_CRASHFIX_TCP_NUKE_ADDR [END] */
 			local_bh_disable();
-			sk->sk_err = ETIMEDOUT;
-			sk->sk_error_report(sk);
+			bh_lock_sock(sk);
 
-			tcp_done(sk);
+			if (!sock_flag(sk, SOCK_DEAD)) {
+				smp_wmb();  /* be consistent with tcp_reset */
+				sk->sk_err = ETIMEDOUT;
+				sk->sk_error_report(sk);
+				tcp_done(sk);
+			}
+
+			bh_unlock_sock(sk);
 			local_bh_enable();
 /* 2013-07-05 indal.choi@lge.com LGP_DATA_KERNEL_CRASHFIX_TCP_NUKE_ADDR [START] */
 			release_sock(sk);
