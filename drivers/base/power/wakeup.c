@@ -22,6 +22,8 @@
 
 static bool enable_bluedroid_timer_ws = true;
 module_param(enable_bluedroid_timer_ws, bool, 0644);
+static bool enable_bluesleep_ws = true;
+module_param(enable_bluesleep_ws, bool, 0644);
 
 /*
  * If set, the suspend/hibernate code will abort transitions to a sleep state
@@ -437,6 +439,9 @@ static void wakeup_source_activate(struct wakeup_source *ws)
 		return;
 			
 	if (!enable_bluedroid_timer_ws && !strcmp(ws->name, "bluedroid_timer"))
+		return;
+
+	if (!enable_bluesleep_ws && !strcmp(ws->name, "bluesleep"))
 		return;
 
 	/*
