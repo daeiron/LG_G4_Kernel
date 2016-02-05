@@ -1,7 +1,7 @@
 #!/bin/sh
 
 #Script needs to be run in kernel root tree with 'bash build/build_kernel.sh'
-#Accepts two arguments; cleandirs (remove build ramdisk, copied kernel and boot.img) and startfresh (also make rproper and make clean)
+#Accepts two arguments; cleandirs (remove build ramdisk, copied kernel and boot.img) and startfresh (also make mrproper and make clean)
 
 #Arguments
 USER_ARG=$1
@@ -9,7 +9,7 @@ USER_ARG=$1
 #Set kernel build vars
 export ARCH=arm64
 export SUBARCH=arm64
-export CROSS_COMPILE=/home/thomas/Downloads/aarch64-linux-android-4.9-e1a8a48e59638c0d24d2214c2a85046068158a08/bin/aarch64-linux-android-
+export CROSS_COMPILE=/home/thomas/android/toolchain/aarch64-linux-android-4.9-e1a8a48e59638c0d24d2214c2a85046068158a08/bin/aarch64-linux-android-
 DEFCONFIG=flykernel_defconfig
 
 #Set locations
@@ -32,12 +32,12 @@ Startfresh() {
 }
 
 #Check the argument given (if any)
-if [ "$USER_ARG" == "cleandirs" ]; 
+if [ "$USER_ARG" == "cleandirs" ];
 then
 	Cleandirs
 fi
 
-if [ "$USER_ARG" == "startfresh" ]; 
+if [ "$USER_ARG" == "startfresh" ];
 then
 	Startfresh
 fi
