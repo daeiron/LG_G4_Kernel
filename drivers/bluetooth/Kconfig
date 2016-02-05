@@ -257,7 +257,7 @@ config BT_WILINK
 config MSM_BT_POWER
 	tristate "MSM Bluetooth Power Control"
 	depends on ARCH_MSM && RFKILL
-	default m
+	default n
 	help
 	  Provides a parameter to switch on/off power from PMIC
 	  to Bluetooth device.
