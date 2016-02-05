@@ -66,8 +66,8 @@ void log_file_size_check(char *filename)
 	struct file *file;
 	loff_t file_size = 0;
 	int i = 0;
-	char buf1[1024] = {0};
-	char buf2[1024] = {0};
+	char buf1[1016] = {0};
+	char buf2[1016] = {0};
 	mm_segment_t old_fs = get_fs();
 	int ret = 0;
 
