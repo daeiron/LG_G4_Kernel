@@ -31,8 +31,6 @@ import init.target.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
-    insmod /sbin/qcrypto_module.ko
-    insmod /sbin/qdrbg_module.ko
 
 # TODO: This MUST be disabled not use 'sdcard' in LGE device.
 on init
@@ -734,10 +732,6 @@ service loc_launcher /system/bin/loc_launcher
 #    group system
 #    disabled
 #    oneshot
-
-on property:crypto.driver.load=1
-     insmod /system/lib/modules/qce.ko
-     insmod /system/lib/modules/qcedev.ko
 
 service drmdiag /system/bin/drmdiagapp
     class late_start

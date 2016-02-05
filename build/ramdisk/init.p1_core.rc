@@ -160,10 +160,6 @@ on property:init.svc.media=restarting
 on property:init.svc.bootanim=stopped
     write /sys/class/i2c-dev/i2c-5/device/5-0072/enable_irq 1
 
-on post-fs
-# enable exfat feature
-	insmod /system/lib/modules/texfat.ko
-
 #SDCard Encrypt.
 on init
     setprop ro.ssbd.session /dev/block/bootdevice/by-name/eksst

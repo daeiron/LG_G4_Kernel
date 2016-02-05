@@ -56,7 +56,6 @@ on post-fs-data
     mkdir /data/LGTContents/ringforme 0771 system lgt_gid
     chmod 771 /system/persist
     chmod 665 /system/persist/LGUPlus_Api.xml
-    chmod 0644 /system/lib/modules/mwlan_aarp.ko
 
 # [hanchul.shin@lgepartner.com][2014-05-08] add LGTConents
     chown system lgt_gid /data/data/com.ubivelox.wipiplayer/W
@@ -69,11 +68,6 @@ on post-fs-data
     chown system lgt_gid /data/LGTContents/ringforme
 # LGE_CHANGE_E LGT_REQ  [hanchul.shin@lgepartner.com][2014-05-08][END]
     restorecon_recursive /data/LGTContents
-
-on post-fs
-    chmod 0644 /system/lib/modules/mwlan_aarp.ko
-    insmod /system/lib/modules/mwlan_aarp.ko
-    chmod 0644 /system/lib/modules/ipsecdrvtl.ko
 
 on post-fs-data
 # NFC local data and nfcee xml storage
