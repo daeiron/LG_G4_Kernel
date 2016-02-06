@@ -1,0 +1,4 @@
+kernel/drivers/bluetooth/broadcom/bt_protocol_driver/brcm_bt_drv.ko: kernel/drivers/bluetooth/broadcom/line_discipline_driver/brcm_hci_ldisc.ko
+kernel/drivers/bluetooth/broadcom/line_discipline_driver/brcm_hci_ldisc.ko:
+kernel/drivers/bluetooth/broadcom/v4l2_fm_driver/fm_drv.ko: kernel/drivers/bluetooth/broadcom/line_discipline_driver/brcm_hci_ldisc.ko
+kernel/drivers/bluetooth/bluetooth-power.ko:

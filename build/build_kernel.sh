@@ -46,6 +46,11 @@ fi
 make $DEFCONFIG
 make -j$THREADS
 
+rm -rf build/install
+mkdir -p build/install
+make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j$THREADS INSTALL_MOD_PATH=build/install INSTALL_MOD_STRIP=1 modules_install
+find build/install -name '*.ko' -type f -exec cp '{}' build/out/flashable/system/lib/modules/ \;
+
 #Copy to out
 cp $KERNEL_BIN build/out/Image.gz-dtb
 
@@ -53,4 +58,4 @@ cp $KERNEL_BIN build/out/Image.gz-dtb
 build/bin/mkbootfs build/ramdisk | gzip > build/out/ramdisk.cpio.gz;
 
 #Make boot.img
-build/bin/mkbootimg --kernel build/out/Image.gz-dtb --ramdisk build/out/ramdisk.cpio.gz --base 0x00000000 --pagesize 4096 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 00000100 --cmdline 'console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 user_debug=31 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 androidboot.selinux=permissive msm_rtb.filter=0x37 boot_cpus=0-5 androidboot.hardware=p1' -o build/out/boot.img
+build/bin/mkbootimg --kernel build/out/Image.gz-dtb --ramdisk build/out/ramdisk.cpio.gz --base 0x00000000 --pagesize 4096 --kernel_offset 0x00008000 --ramdisk_offset 0x01000000 --tags_offset 00000100 --cmdline 'console=ttyHSL0,115200,n8 androidboot.console=ttyHSL0 user_debug=31 ehci-hcd.park=3 lpm_levels.sleep_disabled=1 androidboot.selinux=permissive msm_rtb.filter=0x37 boot_cpus=0-5 androidboot.hardware=p1' -o build/out/flashable/boot.img
