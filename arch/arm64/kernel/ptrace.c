@@ -1143,10 +1143,6 @@ static void tracehook_report_syscall(struct pt_regs *regs,
 asmlinkage int syscall_trace_enter(struct pt_regs *regs)
 {
 	unsigned int saved_syscallno = regs->syscallno;
-	
-	/* Do the secure computing check first; failures should be fast. */
-	if (secure_computing() == -1)
-		return -1;
 
 	/* Do the secure computing check first; failures should be fast. */
 	if (secure_computing(regs->syscallno) == -1)

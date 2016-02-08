@@ -1,3 +1,0 @@
-# Aliases for symbols, used by symbol_request().
-alias symbol:brcm_sh_ldisc_register brcm_hci_ldisc
-alias symbol:brcm_sh_ldisc_unregister brcm_hci_ldisc
