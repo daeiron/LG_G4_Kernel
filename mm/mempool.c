@@ -356,6 +356,16 @@ void *mempool_kmalloc(gfp_t gfp_mask, void *pool_data)
 }
 EXPORT_SYMBOL(mempool_kmalloc);
 
+void *mempool_kmalloc_noswap(gfp_t gfp_mask, void *pool_data)
+{
+	size_t size = (size_t)pool_data;
+	if (!(gfp_mask & __GFP_WAIT))
+		gfp_mask |= __GFP_NO_KSWAPD;
+
+	return kmalloc(size, gfp_mask);
+}
+EXPORT_SYMBOL(mempool_kmalloc_noswap);
+
 void mempool_kfree(void *element, void *pool_data)
 {
 	kfree(element);

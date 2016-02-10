@@ -67,6 +67,14 @@ static irqreturn_t mmc_gpio_cd_irqt(int irq, void *dev_id)
 		goto out;
 
 	if (status ^ ctx->status) {
+		#ifdef CONFIG_MDFPP_CCAUDIT
+		/* Add [CCAudit] to kernel log when SD CARD is detected */
+			if(!(host->caps & MMC_CAP_NONREMOVABLE))
+				pr_info("[CCAudit] %s: slot status change detected (%d -> %d)\n",
+						mmc_hostname(host), ctx->status, status);
+			else
+		#endif
+
 		pr_info("%s: slot status change detected (%d -> %d), GPIO_ACTIVE_%s\n",
 				mmc_hostname(host), ctx->status, status,
 				(host->caps2 & MMC_CAP2_CD_ACTIVE_HIGH) ?

@@ -142,23 +142,27 @@ ifeq ($(LGESP_ITSON), yes)
 endif
 
 ifeq ($(ITSON_ENABLED), true)
-	@mkdir -p $(ANDROID_BUILD_TOP)/$(ITSON_KERNEL_BUILD_PATH)/build
-	@mkdir -p $(ANDROID_BUILD_TOP)/$(TARGET_OUT)/vendor/itson
-	@cp -r $(ANDROID_BUILD_TOP)/$(ITSON_KERNEL_BUILD_PATH)/$(TARGET_ARCH) $(ANDROID_BUILD_TOP)/$(ITSON_KERNEL_BUILD_PATH)/build
-	@sh $(ANDROID_BUILD_TOP)/$(ITSON_KERNEL_BUILD_PATH)/build/$(TARGET_ARCH)/build-kernel.sh $(KERNEL_CROSS_COMPILE) $(ANDROID_BUILD_TOP)/$(KERNEL_OUT) $(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/itson 1500 $(TARGET_BUILD_VARIANT) system $(PLATFORM_VERSION)
-	@cp $(ANDROID_BUILD_TOP)/$(ITSON_KERNEL_BUILD_PATH)/$(TARGET_ARCH)/kernel.api $(ANDROID_BUILD_TOP)/$(TARGET_OUT)/vendor/itson/
-
-	perl  $(ANDROID_BUILD_TOP)/kernel/scripts/sign-file sha1 \
+ifeq ($(TARGET_BUILD_VARIANT), user)
+	perl $(ANDROID_BUILD_TOP)/kernel/scripts/sign-file sha1 \
 	$(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/signing_key.priv $(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/signing_key.x509 \
-	$(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/itson/$(TARGET_BUILD_VARIANT)/itson_module1.ko \
+	$(ANDROID_BUILD_TOP)/$(ITSON_RESOURCE_PATH)/system/lib/modules/itson_module1_user.ko \
 	$(ANDROID_BUILD_TOP)/$(KERNEL_MODULES_OUT)/itson_module1.ko
 
-	perl  $(ANDROID_BUILD_TOP)/kernel/scripts/sign-file sha1 \
+	perl $(ANDROID_BUILD_TOP)/kernel/scripts/sign-file sha1 \
 	$(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/signing_key.priv $(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/signing_key.x509 \
-	$(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/itson/$(TARGET_BUILD_VARIANT)/itson_module2.ko \
+	$(ANDROID_BUILD_TOP)/$(ITSON_RESOURCE_PATH)/system/lib/modules/itson_module2_user.ko \
 	$(ANDROID_BUILD_TOP)/$(KERNEL_MODULES_OUT)/itson_module2.ko
+else
+	perl $(ANDROID_BUILD_TOP)/kernel/scripts/sign-file sha1 \
+	$(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/signing_key.priv $(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/signing_key.x509 \
+	$(ANDROID_BUILD_TOP)/$(ITSON_RESOURCE_PATH)/system/lib/modules/itson_module1_debug.ko \
+	$(ANDROID_BUILD_TOP)/$(KERNEL_MODULES_OUT)/itson_module1.ko
 
-	@rm -rf $(ANDROID_BUILD_TOP)/$(ITSON_KERNEL_BUILD_PATH)/build
+	perl $(ANDROID_BUILD_TOP)/kernel/scripts/sign-file sha1 \
+	$(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/signing_key.priv $(ANDROID_BUILD_TOP)/$(KERNEL_OUT)/signing_key.x509 \
+	$(ANDROID_BUILD_TOP)/$(ITSON_RESOURCE_PATH)/system/lib/modules/itson_module2_debug.ko \
+	$(ANDROID_BUILD_TOP)/$(KERNEL_MODULES_OUT)/itson_module2.ko
+endif
 endif
 
 $(KERNEL_BUILD_STAMP): $(KERNEL_OUT) $(KERNEL_SRC_DIR)/

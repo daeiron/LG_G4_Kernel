@@ -157,7 +157,7 @@ static int cpu_set_freq(int freq, int cpu)
 									CPUFREQ_RELATION_L;
 	/* check target cpu */
 	if(cpufreq_interactive_gov_stat(cpu)) {
-		 __cpufreq_driver_target(pcpu->policy, freq, relation);
+		 cpufreq_driver_target(pcpu->policy, freq, relation);
 	}
 	return 0;
 }

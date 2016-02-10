@@ -9,7 +9,7 @@
 #define LGFTM_ACG_CARRIER_CODE_SIZE    1
 #define FTM_PAGE_SIZE                  2048
 
-static const char *ftmdev = "/dev/block/platform/f9824900.sdhci/by-name/misc";
+static const char *ftmdev = "/dev/block/bootdevice/by-name/misc";
 
 int set_carrier_code(unsigned long int in)
 {

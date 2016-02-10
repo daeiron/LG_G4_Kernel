@@ -53,6 +53,7 @@ mempool_create_slab_pool(int min_nr, struct kmem_cache *kc)
  * amount of memory specified by pool_data
  */
 void *mempool_kmalloc(gfp_t gfp_mask, void *pool_data);
+void *mempool_kmalloc_noswap(gfp_t gfp_mask, void *pool_data);
 void mempool_kfree(void *element, void *pool_data);
 static inline mempool_t *mempool_create_kmalloc_pool(int min_nr, size_t size)
 {

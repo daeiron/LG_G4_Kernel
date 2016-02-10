@@ -41,6 +41,9 @@
 #include <linux/fips.h>
 #include <linux/cc_mode.h>
 #include <crypto/rng.h>
+#ifdef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
+#include <crypto/hash.h>
+#endif
 #define SEED_LEN 48
 #endif
 
@@ -55,6 +58,7 @@ ecryptfs_encrypt_page_offset(struct ecryptfs_crypt_stat *crypt_stat,
 			     struct page *src_page, int src_offset, int size,
 			     unsigned char *iv);
 #ifdef CONFIG_CRYPTO_FIPS
+#ifndef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
 static int crypto_sec_reset_rng(struct crypto_rng *tfm)
 {
 	char *seed = NULL;
@@ -103,7 +107,7 @@ out:
 	if (filp) filp_close(filp, NULL);
 	return err;
 }
-
+#endif
 /**
  * crypto_fips_rng_get_bytes
  * @data: Buffer to get random bytes
@@ -116,27 +120,38 @@ static int crypto_sec_rng_get_bytes(u8 *data, unsigned int len)
 	int err = 0;
 
 	if (!crypto_sec_rng) {
+#ifdef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
+		rng = crypto_alloc_rng("qrng", 0, 0);
+#else
 		rng = crypto_alloc_rng("fips(ansi_cprng)", 0, 0);
+#endif
 		err = PTR_ERR(rng);
 		if (IS_ERR(rng))
 			goto out;
+#ifndef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
 		err = crypto_sec_reset_rng(rng);
 		if (err) {
 			if (rng)
 				crypto_free_rng(rng);
 			goto out;
 		}
+#endif
 		crypto_sec_rng = rng;
 	}
 
 	err = crypto_rng_get_bytes(crypto_sec_rng, data, len);
 
+#ifdef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
+    if (err)
+        ecryptfs_printk(KERN_ERR, "Error getting random bytes in SEC mode (err=%d)\n", err);
+
+#else
 	if (err != len)
 		ecryptfs_printk(KERN_ERR, "Error getting random bytes in SEC mode (err=%d, len=%d)\n", err, len);
+#endif
 
 out:
 	return err;
-
 }
 #endif
 
@@ -185,6 +200,23 @@ void ecryptfs_from_hex(char *dst, char *src, int dst_size)
  * Uses the allocated crypto context that crypt_stat references to
  * generate the SHA256 sum of the contents of src.
  */
+#ifdef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
+struct hash_result {
+	struct completion completion;
+	int err;
+};
+
+static void hash_complete(struct crypto_async_request *req, int err)
+{
+	struct hash_result *res = req->data;
+
+	if (err == -EINPROGRESS)
+		return;
+
+	res->err = err;
+	complete(&res->completion);
+}
+#endif
 static int ecryptfs_calculate_sha256(char *dst,
 				  struct ecryptfs_crypt_stat *crypt_stat,
 				  char *src, int len)
@@ -195,12 +227,37 @@ static int ecryptfs_calculate_sha256(char *dst,
 		.flags = CRYPTO_TFM_REQ_MAY_SLEEP
 	};
 	int rc = 0;
+#ifdef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
+	struct hash_result result;
+	struct crypto_ahash *tfm;
+	struct ahash_request *req;
+#endif
 
 	mutex_lock(&crypt_stat->cs_hash_tfm_mutex);
 	sg_init_one(&sg, (u8 *)src, len);
 	if (!desc.tfm) {
+#ifdef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
+		tfm = crypto_alloc_ahash("qcom-sha256", 0, 0);
+		if (IS_ERR(tfm)) {
+			pr_err("failed to load transform %ld\n", PTR_ERR(tfm));
+			mutex_unlock(&crypt_stat->cs_hash_tfm_mutex);
+			return -1;
+		}
+
+		init_completion(&result.completion);
+
+		req = ahash_request_alloc(tfm, GFP_KERNEL);
+		if (!req) {
+			pr_err("ahash request allocation failure\n");
+			rc = -1;
+			goto out;
+		}
+
+		ahash_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG, hash_complete, &result);
+#else
 		desc.tfm = crypto_alloc_hash(ECRYPTFS_SHA256_HASH, 0,
 					     CRYPTO_ALG_ASYNC);
+
 		if (IS_ERR(desc.tfm)) {
 			rc = PTR_ERR(desc.tfm);
 			ecryptfs_printk(KERN_ERR, "Error attempting to "
@@ -209,7 +266,22 @@ static int ecryptfs_calculate_sha256(char *dst,
 			goto out;
 		}
 		crypt_stat->hash_tfm = desc.tfm;
+#endif
 	}
+#ifdef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
+    ahash_request_set_crypt(req, &sg, dst, len);
+
+	rc = crypto_ahash_digest(req);
+
+	if (rc == -EINPROGRESS || rc == -EBUSY) {
+		rc = wait_for_completion_interruptible(&result.completion);
+		if (!rc)
+			rc = result.err;
+		INIT_COMPLETION(result.completion);
+	}
+
+	ahash_request_free(req);
+#else
 	rc = crypto_hash_init(&desc);
 	if (rc) {
 		printk(KERN_ERR
@@ -231,7 +303,11 @@ static int ecryptfs_calculate_sha256(char *dst,
 		       __func__, rc);
 		goto out;
 	}
+#endif
 out:
+#ifdef CONFIG_CRYPTO_DEV_HWCRYPTO_FOR_SDCARD
+	crypto_free_ahash(tfm);
+#endif
 	mutex_unlock(&crypt_stat->cs_hash_tfm_mutex);
 	return rc;
 }

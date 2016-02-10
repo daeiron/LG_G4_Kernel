@@ -828,10 +828,12 @@ static int __init logger_init(void)
 	if (unlikely(ret))
 		goto out;
 
+#ifdef CONFIG_MDFPP_CCAUDIT
 	ret = create_log(LOGGER_LOG_CCAUDIT, CONFIG_LOGCAT_SIZE*1024);
 	if (unlikely(ret))
 		goto out;
 
+#endif
 out:
 	return ret;
 }

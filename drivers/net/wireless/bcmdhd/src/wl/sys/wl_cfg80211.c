@@ -9968,6 +9968,10 @@ static s32 wl_update_bss_info(struct bcm_cfg80211 *cfg, struct net_device *ndev,
 		freq = ieee80211_channel_to_frequency(channel, band);
 #endif
 		cur_channel = ieee80211_get_channel(wiphy, freq);
+		if (unlikely(!cur_channel)) {
+			WL_ERR(("could not find the channel [c=%d,b=%d,f=%d]\n",channel, band, freq));
+			goto update_bss_info_out;
+		}
 		bss->channel = cur_channel;
 #endif /* ROAM_CHANNEL_CACHE */
 #if defined(WL_CFG80211_P2P_DEV_IF)

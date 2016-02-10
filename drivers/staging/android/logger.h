@@ -74,8 +74,9 @@ struct logger_entry {
 #define LOGGER_LOG_EVENTS	"log_events"	/* system/hardware events */
 #define LOGGER_LOG_SYSTEM	"log_system"	/* system/framework messages */
 #define LOGGER_LOG_MAIN		"log_main"	 /* everything else */
+#ifdef CONFIG_MDFPP_CCAUDIT
 #define LOGGER_LOG_CCAUDIT	"log_ccaudit"	 /* mdfpp audit log */
-
+#endif
 
 #define LOGGER_ENTRY_MAX_PAYLOAD	4076
 

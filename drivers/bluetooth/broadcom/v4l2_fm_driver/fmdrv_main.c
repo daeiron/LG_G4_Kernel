@@ -1232,15 +1232,9 @@ int fmc_enable (struct fmdrv_ops *fmdev, unsigned char opt)
         return ret;
     }
     fmdev->rx.fm_func_mask = opt;
-// BRCM LOCAL[CSP#990808] : After BT On and FM Radio Off, sleep current is high
-//org
     /* wait for 50 ms before sending any more commands */
-    //mdelay (50);
-//new
-    /* should wait for a while after sending FM enable command. */
-    mdelay (V4L2_FM_ENABLE_DELAY);
-    V4L2_FM_DRV_ERR("(fmdrv): FM delay time for enable command : %d ms", V4L2_FM_ENABLE_DELAY);
-// BRCM LOCAL[CSP#990808]
+    mdelay (50);
+
     /* wrire rds control */
     rdbs_en_dis = (opt & FM_RBDS_BIT) ?
             FM_RDBS_ENABLE : FM_RDBS_DISABLE;
