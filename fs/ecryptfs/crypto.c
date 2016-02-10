@@ -2002,8 +2002,9 @@ ecryptfs_process_key_cipher(struct crypto_blkcipher **key_tfm,
 	char dummy_key[ECRYPTFS_MAX_KEY_BYTES];
 	char *full_alg_name = NULL;
 	int rc = 0;
+#ifdef CONFIG_CRYPTO_FIPS
 	int cc_flag;
-
+#endif
 	*key_tfm = NULL;
 	if (*key_size > ECRYPTFS_MAX_KEY_BYTES) {
 		rc = -EINVAL;
