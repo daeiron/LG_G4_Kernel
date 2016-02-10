@@ -27,7 +27,9 @@ Cleandirs() {
 
 Startfresh() {
 	echo "Starting fresh"
-	rm -rf build/out/*
+	rm -f build/out/*
+	rm -rf build/out/flashable/system/
+	rm -f build/out/flashable/boot.img
 	make mrproper && make clean
 }
 
@@ -48,6 +50,7 @@ make -j$THREADS
 
 rm -rf build/install
 mkdir -p build/install
+mkdir -p build/out/flashable/system/lib/modules
 make ARCH=arm64 CROSS_COMPILE=${CROSS_COMPILE} -j$THREADS INSTALL_MOD_PATH=build/install INSTALL_MOD_STRIP=1 modules_install
 find build/install -name '*.ko' -type f -exec cp '{}' build/out/flashable/system/lib/modules/ \;
 
