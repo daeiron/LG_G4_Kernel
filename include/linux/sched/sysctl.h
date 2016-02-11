@@ -67,7 +67,6 @@ extern unsigned int sysctl_sched_powerband_limit_pct;
 extern unsigned int sysctl_sched_bmhb_cs;
 extern unsigned int sysctl_sched_bmhb_load_pct;
 extern unsigned int sysctl_sched_boost;
-extern unsigned int sysctl_sched_cancun;
 
 #else /* CONFIG_SCHED_HMP */
 
