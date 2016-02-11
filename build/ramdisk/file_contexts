@@ -164,7 +164,6 @@
 /system/bin/racoon	u:object_r:racoon_exec:s0
 /system/xbin/su		u:object_r:su_exec:s0
 /system/xbin/procrank   u:object_r:procrank_exec:s0
-/system/xbin/perfprofd  u:object_r:perfprofd_exec:s0
 /system/xbin/simpleperf u:object_r:system_file:s0
 /system/vendor/bin/gpsd u:object_r:gpsd_exec:s0
 /system/bin/dnsmasq     u:object_r:dnsmasq_exec:s0
@@ -364,7 +363,6 @@
 /system/bin/lgdrmserver					u:object_r:lgdrmserver_exec:s0
 /system/bin/lghashstorageserver u:object_r:lghashstorageserver_exec:s0
 /system/bin/lgsecclkserver u:object_r:lgsecclkserver_exec:s0
-/system/bin/libbroadcast_server	u:object_r:libbroadcast_server_exec:s0
 /system/bin/mcDriverDaemon u:object_r:mcdaemon_exec:s0
 /system/bin/mtsd           u:object_r:mtsd_exec:s0
 /system/bin/pfm                      u:object_r:pfm_exec:s0
@@ -938,7 +936,6 @@
 /system/bin/audiod                              u:object_r:audiod_exec:s0
 /system/bin/charger_monitor                     u:object_r:charger_monitor_exec:s0
 /system/bin/hvdcp_opti                          u:object_r:hvdcp_exec:s0
-/system/bin/cnd                                 u:object_r:cnd_exec:s0
 /system/bin/diag_callback_client                u:object_r:diag_exec:s0
 /system/bin/diag_dci_sample                     u:object_r:diag_exec:s0
 /system/bin/diag_klog                           u:object_r:diag_exec:s0
@@ -990,7 +987,6 @@
 /system/bin/pm-proxy                            u:object_r:per_mgr_exec:s0
 /system/vendor/bin/pd-mapper                    u:object_r:pd_mapper_exec:s0
 /system/vendor/bin/pd-api-test                  u:object_r:pd_mapper_exec:s0
-/system/bin/usb_uicc_client                     u:object_r:usb_uicc_daemon_exec:s0
 /system/bin/qcom-system-daemon                  u:object_r:qcomsysd_exec:s0
 /system/xbin/qlogd                              u:object_r:qlogd_exec:s0
 /system/bin/ipacm                               u:object_r:ipacm_exec:s0
@@ -1011,9 +1007,7 @@
 /system/bin/gpsone_daemon                       u:object_r:location_exec:s0
 /system/vendor/bin/slim_daemon                  u:object_r:location_exec:s0
 /system/bin/energy-awareness                    u:object_r:energyawareness_exec:s0
-/system/vendor/bin/fidodaemon                   u:object_r:fidodaemon_exec:s0
 /system/vendor/bin/qseeproxydaemon              u:object_r:qseeproxy_exec:s0
-/system/bin/dts_configurator                    u:object_r:dtsconfigurator_exec:s0
 /system/bin/dts_eagle_service                   u:object_r:dtseagleservice_exec:s0
 /system/vendor/bin/qti                          u:object_r:qti_exec:s0
 /system/bin/wcnss_service                       u:object_r:wcnss_service_exec:s0

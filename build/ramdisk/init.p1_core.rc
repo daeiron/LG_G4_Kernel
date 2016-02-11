@@ -33,9 +33,6 @@ import /init.lge.modem_log.rc
 # import init script for zram, which is a subset of project Svelte.
 import /init.lge.svelte.rc
 
-# pss logger
-import /init.lge.pss.rc
-
 #[P1_BRINGUP_S]
 import /init.alphap.bt_vendor.rc
 #[P1_BRINGUP_E]
@@ -140,13 +137,6 @@ on boot
     chown system system /sys/devices/virtual/blmap_adjust/bl_store_mode/enable
     chmod 644 /sys/devices/virtual/blmap_adjust/bl_store_mode/enable
 # End Retail Mode Display Feature
-
-#Broadcast Service [hyun118.shin@lge.com]
-service broadcast /system/bin/libbroadcast_server
-    class main
-    user media
-    group system audio media graphics sdcard_rw
-    socket dmb_socket stream 0660 media media
 
 on property:init.svc.media=restarting
     restart broadcast

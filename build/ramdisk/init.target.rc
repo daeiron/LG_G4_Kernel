@@ -76,9 +76,6 @@ on boot
 #   symlink /dev/block/platform/soc.0 /dev/block/bootdevice
     start rmt_storage
     start rfs_access
-    write /sys/bus/i2c/devices/2-004a/update_fw 1
-    write /sys/bus/i2c/devices/2-004a/update_cfg 1
-    write /sys/bus/i2c/devices/2-0020/input/input0/update_fw 1
 # access permission for secure touch
     chmod 0660 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch_enable
     chmod 0440 /sys/devices/soc.0/f9924000.i2c/i2c-2/2-0020/input/input0/secure_touch
@@ -297,21 +294,10 @@ service usf-post-boot /system/bin/sh /system/etc/usf_post_boot.sh
 #    user root
 #    group root
 
-service seald /system/bin/seald
-    class late_start
-    user root
-    group system
-
 service energy-awareness /system/bin/energy-awareness
     class main
     user root
     group system
-    oneshot
-
-service dts_configurator /system/bin/dts_configurator
-    class late_start
-    user system
-    group system media audio
     oneshot
 
 service dtseagleservice /system/bin/dts_eagle_service
@@ -322,8 +308,3 @@ service dtseagleservice /system/bin/dts_eagle_service
 
 on property:init.svc.dts_configurator=stopped
     start dtseagleservice
-
-service fidodaemon /system/vendor/bin/fidodaemon
-    class late_start
-    user system
-    group system

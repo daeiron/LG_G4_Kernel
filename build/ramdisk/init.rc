@@ -89,11 +89,6 @@ on init
     mount cgroup none /dev/memcg memory
 
     write /proc/sys/kernel/panic_on_oops 1
-    write /proc/sys/kernel/hung_task_timeout_secs 0
-    write /proc/cpu/alignment 4
-    write /proc/sys/kernel/sched_latency_ns 10000000
-    write /proc/sys/kernel/sched_wakeup_granularity_ns 2000000
-    write /proc/sys/kernel/sched_compat_yield 1
     write /proc/sys/kernel/sched_child_runs_first 0
     write /proc/sys/kernel/randomize_va_space 2
     write /proc/sys/kernel/kptr_restrict 2
@@ -120,7 +115,6 @@ on init
     chown system system /dev/cpuctl
     chown system system /dev/cpuctl/tasks
     chmod 0666 /dev/cpuctl/tasks
-    write /dev/cpuctl/cpu.shares 1024
     write /dev/cpuctl/cpu.rt_runtime_us 800000
     write /dev/cpuctl/cpu.rt_period_us 1000000
 
@@ -174,9 +168,6 @@ on init
     chmod 0440 /sys/fs/pstore/console-ramoops
     chown system log /sys/fs/pstore/pmsg-ramoops-0
     chmod 0440 /sys/fs/pstore/pmsg-ramoops-0
-
-    # enable armv8_deprecated instruction hooks
-    write /proc/sys/abi/swp 1
 
 # Healthd can trigger a full boot from charger mode by signaling this
 # property when the power button is held.
@@ -743,11 +734,6 @@ service uncrypt-lcdoff /system/bin/uncrypt --lcdoff
     disabled
     oneshot
 #[LGE_UPDATE_E] DMS_SYSTEM dms-fota@lge.com
-
-service perfprofd /system/xbin/perfprofd
-    class late_start
-    user root
-    oneshot
 
 on property:persist.logd.logpersistd=logcatd
     # all exec/services are called with umask(077), so no gain beyond 0700
