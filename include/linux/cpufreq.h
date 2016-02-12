@@ -411,6 +411,12 @@ void cpufreq_unregister_governor(struct cpufreq_governor *governor);
  * Performance governor is fallback governor if any other gov failed to auto
  * load due latency restrictions
  */
+
+#ifdef CONFIG_CPU_FREQ_GOV_CAFACTIVE
+extern unsigned int cpufreq_cafactive_get_hispeed_freq(int cpu);
+extern void cafactive_boost_ondemand(int cpu, s64 miliseconds, bool static_switch);
+#endif
+
 #ifdef CONFIG_CPU_FREQ_GOV_PERFORMANCE
 extern struct cpufreq_governor cpufreq_gov_performance;
 #endif
@@ -434,6 +440,9 @@ extern struct cpufreq_governor cpufreq_gov_interactive;
 #elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_IMPULSE)
 extern struct cpufreq_governor cpufreq_gov_impulse;
 #define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_impulse)
+#elif defined(CONFIG_CPU_FREQ_DEFAULT_GOV_CAFACTIVE)
+extern struct cpufreq_governor cpufreq_gov_cafactive;
+#define CPUFREQ_DEFAULT_GOVERNOR	(&cpufreq_gov_cafactive)
 #endif
 
 /*********************************************************************
