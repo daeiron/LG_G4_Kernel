@@ -141,16 +141,6 @@ static void req_cryptd_split_req_queue
 static void req_crypt_split_io_complete
 		(struct req_crypt_result *res, int err);
 
-static  unsigned int get_sg_len(struct request *rq)
-{
-	int len = 0;
-	struct bio *bio;
-	__rq_for_each_bio(bio, rq) {
-		len += bio_segments(bio);
-	}
-	return len;
-}
-
 static  bool req_crypt_should_encrypt(struct req_dm_crypt_io *req)
 {
 	int ret = 0;
@@ -301,9 +291,6 @@ static void req_cryptd_crypt_read_convert(struct req_dm_crypt_io *io)
 	bool split_transfers = 0;
 	sector_t tempiv;
 	struct req_dm_split_req_io *split_io = NULL;
-
-	bool is_mempool_alloc = 0;
-	unsigned int predicted_sg_len = 0;
 
 	if (io) {
 		error = io->error;
@@ -507,8 +494,6 @@ static void req_cryptd_crypt_write_convert(struct req_dm_crypt_io *io)
 	unsigned int engine_list_total = 0;
 	struct crypto_engine_entry *curr_engine_list = NULL;
 	unsigned int *engine_cursor = NULL;
-	bool is_mempool_alloc = 0;
-	unsigned int predicted_sg_len = 0;
 
 
 	if (io) {
