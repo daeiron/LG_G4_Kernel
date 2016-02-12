@@ -13,11 +13,8 @@
 #include <linux/swapops.h>
 #ifdef CONFIG_PROCESS_RECLAIM
 #include <linux/mm_inline.h>
-<<<<<<< HEAD
 #endif
-=======
 #include <linux/ctype.h>
->>>>>>> bfdd93c... mm: Support address range reclaim
 
 #include <asm/elf.h>
 #include <asm/uaccess.h>

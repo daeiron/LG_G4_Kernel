@@ -1876,7 +1876,7 @@ static int best_small_task_cpu(struct task_struct *p, int sync)
 			return fallback_cpu;
 
 		i = cpumask_first(&search_cpu);
-
+	}
 	do {
 		rq = cpu_rq(i);
 
