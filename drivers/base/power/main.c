@@ -632,12 +632,10 @@ static void dpm_resume_noirq(pm_message_t state)
 	}
 
 	while (!list_empty(&dpm_noirq_list)) {
-		dev = to_device(dpm_noirq_list.next);
-		int error;
-
 #if defined(CONFIG_MACH_LGE)
 		ktime_t stime, etime;
 #endif
+		dev = to_device(dpm_noirq_list.next);
 		get_device(dev);
 		list_move_tail(&dev->power.entry, &dpm_late_early_list);
 		mutex_unlock(&dpm_list_mtx);
@@ -777,12 +775,10 @@ static void dpm_resume_early(pm_message_t state)
 	}
 
 	while (!list_empty(&dpm_late_early_list)) {
-		dev = to_device(dpm_late_early_list.next);
-		int error;
-
 #if defined(CONFIG_MACH_LGE)
 		ktime_t stime, etime;
 #endif
+		dev = to_device(dpm_late_early_list.next);
 		get_device(dev);
 		list_move_tail(&dev->power.entry, &dpm_suspended_list);
 		mutex_unlock(&dpm_list_mtx);

@@ -53,16 +53,6 @@ bool is_display_on(void)
         return display_on;
 }
 
-void mdss_set_bl_ctrl_by_panel(int enable)
-{
-	mdss_bl_ctrl_panel = enable;
-}
-
-static int mdss_bl_ctrl_by_panel(void)
-{
-	return mdss_bl_ctrl_panel;
-}
-
 void mdss_dsi_panel_pwm_cfg(struct mdss_dsi_ctrl_pdata *ctrl)
 {
 	if (ctrl->pwm_pmi)
