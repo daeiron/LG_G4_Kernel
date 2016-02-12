@@ -33,10 +33,6 @@
 #include <soc/qcom/lge/board_lge.h>
 #define XO_CLK_RATE	19200000
 
-#ifdef CONFIG_STATE_NOTIFIER
-#include <linux/state_notifier.h>
-#endif
-
 #if IS_ENABLED(CONFIG_LGE_DISPLAY_POWER_SEQUENCE)
 #include "lge/panel/oem_mdss_dsi_common.h"
 struct lge_mdss_dsi_interface lge_mdss_dsi;
@@ -1546,10 +1542,6 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		if (ctrl_pdata->on_cmds.link_state == DSI_HS_MODE)
 			rc = mdss_dsi_unblank(pdata);
 		pdata->panel_info.esd_rdy = true;
-#ifdef CONFIG_STATE_NOTIFIER
-		if (!use_fb_notifier)
-			state_resume();
-#endif
 		lcd_notifier_call_chain(LCD_EVENT_ON_END, NULL);
 		break;
 	case MDSS_EVENT_BLANK:
@@ -1569,14 +1561,7 @@ static int mdss_dsi_event_handler(struct mdss_panel_data *pdata,
 		if (ctrl_pdata->off_cmds.link_state == DSI_LP_MODE)
 			rc = mdss_dsi_blank(pdata, power_state);
 		rc = mdss_dsi_off(pdata, power_state);
-<<<<<<< HEAD
-#ifdef CONFIG_STATE_NOTIFIER
-		if (!use_fb_notifier)
-			state_suspend();
-#endif
-=======
 		lcd_notifier_call_chain(LCD_EVENT_OFF_END, NULL);
->>>>>>> 447934f... msm: mdss: Adding lcd notifier
 #if IS_ENABLED(CONFIG_LGE_DISPLAY_POWER_SEQUENCE)
 		if (lge_mdss_dsi.lge_mdss_dsi_event_handler)
 			lge_mdss_dsi.lge_mdss_dsi_event_handler(pdata, event, arg);
